@@ -5,7 +5,7 @@ import {
 } from "react-native-calendars";
 import { colors } from "@/styles/colors";
 import { fontFamily } from "@/styles";
-import { ptBR } from "@/utils/localeCalendarConfig";
+import { ptBR } from "@/utils";
 
 LocaleConfig.locales["pt-br"] = ptBR;
 LocaleConfig.defaultLocale = "pt-br";
