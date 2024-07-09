@@ -1,4 +1,5 @@
-import { api } from ".";
+import { isAxiosError } from "axios";
+import { api } from "./api";
 
 export type TripDetails = {
   id: string;
@@ -40,7 +41,25 @@ const getById = async (id: string): Promise<TripDetails> => {
   }
 };
 
+const update = async ({
+  id,
+  ...rest
+}: Omit<TripDetails, "is_confirmed">): Promise<TripDetails> => {
+  try {
+    const { data } = await api.put<{ trip: TripDetails }>(`/trips/${id}`, rest);
+
+    return data.trip;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    }
+
+    throw new Error("Failed to update trip");
+  }
+};
+
 export const tripServer = {
   create,
   getById,
+  update,
 };

@@ -1,13 +1,14 @@
 import { Slot } from "expo-router";
-import { View, StatusBar, Text } from "react-native";
+import { View, StatusBar } from "react-native";
 import {
   useFonts,
   Inter_400Regular,
   Inter_500Medium,
   Inter_600SemiBold,
 } from "@expo-google-fonts/inter";
-import "@/styles/global.css";
 import { Loading } from "@/components";
+import "@/styles/global.css";
+import "@/utils/dayjsLocaleConfig";
 
 const Layout = () => {
   const [fontsLoaded] = useFonts({
