@@ -44,12 +44,16 @@ const Trip = () => {
 
   const tripParams = useLocalSearchParams<{
     id: string;
-    participants?: string;
+    participant?: string;
   }>();
 
   const getTripDetails = async () => {
     try {
       setIsLoadingTrip(true);
+
+      if (tripParams.participant) {
+        setShowModal(MODAL.CONFIRM_ATTENDANCE);
+      }
 
       if (!tripParams.id) {
         return router.back();
@@ -129,7 +133,7 @@ const Trip = () => {
 
   const handleConfirmAttendance = async () => {
     try {
-      if (!tripParams.participants || !tripParams.id) return;
+      if (!tripParams.participant || !tripParams.id) return;
 
       if (!guestName.trim() || !guestEmail.trim()) {
         return Alert.alert(
@@ -145,7 +149,7 @@ const Trip = () => {
       setIsConfirmingAttendance(true);
 
       await participantsServer.confirmTripByParticipantId({
-        participantId: tripParams.participants,
+        participantId: tripParams.participant,
         email: guestEmail,
         name: guestName,
       });
@@ -160,6 +164,22 @@ const Trip = () => {
     } finally {
       setIsConfirmingAttendance(false);
     }
+  };
+
+  const handleRemoveTrip = async () => {
+    Alert.alert("Remover viagem", "Deseja realmente remover essa viagem?", [
+      {
+        text: "Não",
+        style: "cancel",
+      },
+      {
+        text: "Sim",
+        onPress: async () => {
+          await tripStorage.remove();
+          router.navigate("/");
+        },
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -252,6 +272,12 @@ const Trip = () => {
           <Button onPress={handleUpdateTrip} isLoading={isUpdatingTrip}>
             <Button.Title>Atualizar</Button.Title>
           </Button>
+
+          <TouchableOpacity activeOpacity={0.8} onPress={handleRemoveTrip}>
+            <Text className="text-red-400 text-center mt-6">
+              Remover viagem
+            </Text>
+          </TouchableOpacity>
         </View>
       </Modal>
 
