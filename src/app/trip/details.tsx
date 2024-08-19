@@ -12,10 +12,11 @@ import {
 import { LinksAdapter } from "@/data/adapter/links.adapter";
 import { RemoteLinks } from "@/domain/links";
 import { AxiosHttpClient } from "@/infra/axios-http-client";
-import { participantsServer } from "@/server";
 import { colors } from "@/styles";
 import { validateInput } from "@/utils";
 import { Plus } from "lucide-react-native";
+import { RemoteParticipants } from "@/domain/participants/participants";
+import { ParticipantsAdapter } from "@/data/adapter/participants.adapter";
 
 interface TripActivitiesProps {
   tripId: string;
@@ -30,6 +31,9 @@ export const TripDetailsTab = ({ tripId }: TripActivitiesProps) => {
   const [participants, setParticipants] = useState<ParticipantProps[]>([]);
 
   const linksServer = new RemoteLinks(new LinksAdapter(new AxiosHttpClient()));
+  const participantsServer = new RemoteParticipants(
+    new ParticipantsAdapter(new AxiosHttpClient())
+  );
 
   const resetNewLinkFields = () => {
     setLinkTitle("");
