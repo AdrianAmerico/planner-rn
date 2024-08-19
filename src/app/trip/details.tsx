@@ -1,3 +1,5 @@
+import { Alert, Text, View, FlatList } from "react-native";
+import { useEffect, useState } from "react";
 import {
   Button,
   Input,
@@ -7,13 +9,13 @@ import {
   TripLink,
   TripLinkProps,
 } from "@/components";
+import { LinksAdapter } from "@/data/adapter/links.adapter";
+import { RemoteLinks } from "@/domain/links";
+import { AxiosHttpClient } from "@/infra/axios-http-client";
 import { participantsServer } from "@/server";
-import { linksServer } from "@/server/links-server";
 import { colors } from "@/styles";
 import { validateInput } from "@/utils";
 import { Plus } from "lucide-react-native";
-import { useEffect, useState } from "react";
-import { Alert, Text, View, FlatList } from "react-native";
 
 interface TripActivitiesProps {
   tripId: string;
@@ -26,6 +28,8 @@ export const TripDetailsTab = ({ tripId }: TripActivitiesProps) => {
   const [isCreatingLinkTrip, setIsCreatingLinkTrip] = useState(false);
   const [links, setLinks] = useState<TripLinkProps[]>([]);
   const [participants, setParticipants] = useState<ParticipantProps[]>([]);
+
+  const linksServer = new RemoteLinks(new LinksAdapter(new AxiosHttpClient()));
 
   const resetNewLinkFields = () => {
     setLinkTitle("");
