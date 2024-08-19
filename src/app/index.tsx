@@ -22,7 +22,9 @@ import { DateData } from "react-native-calendars";
 import dayjs from "dayjs";
 import { tripStorage } from "@/storage/trip";
 import { router } from "expo-router";
-import { tripServer } from "@/server";
+import { RemoteTrip } from "@/domain/trip/trip";
+import { TripAdapter } from "@/data/adapter/trip.adapter";
+import { AxiosHttpClient } from "@/infra/axios-http-client";
 
 enum StepForm {
   TRIP_DETAILS = 1,
@@ -44,6 +46,8 @@ const Home = () => {
   const [destination, setDestination] = useState("");
   const [emailToInvite, setEmailToInvite] = useState("");
   const [emailToInvites, setEmailToInvites] = useState<string[]>([]);
+
+  const tripServer = new RemoteTrip(new TripAdapter(new AxiosHttpClient()));
 
   const handleNextStepForm = () => {
     if (
