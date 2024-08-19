@@ -9,6 +9,7 @@ import {
 import { Loading } from "@/components";
 import "@/styles/global.css";
 import "@/utils/dayjsLocaleConfig";
+import 'reflect-metadata';
 
 const Layout = () => {
   const [fontsLoaded] = useFonts({

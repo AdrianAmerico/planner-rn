@@ -1,21 +1,4 @@
-import { api } from "./api";
-
-type Activity = {
-  id: string;
-  occurs_at: string;
-  title: string;
-};
-
-type ActivityCreate = Omit<Activity, "id"> & {
-  tripId: string;
-};
-
-type ActivityResponse = {
-  activities: {
-    date: string;
-    activities: Activity[];
-  }[];
-};
+import { ActivityCreate, ActivityResponse } from "@/data/activities/activities";
 
 async function create({ tripId, occurs_at, title }: ActivityCreate) {
   try {

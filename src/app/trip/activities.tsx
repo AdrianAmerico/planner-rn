@@ -18,7 +18,10 @@ import {
 import { colors } from "@/styles";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { activitiesServer } from "@/server";
+import { container } from "tsyringe";
+import { RemoteActivities } from "@/domain";
+import { AxiosHttpClient } from "@/infra/axios-http-client";
+import { ActivitiesAdapter } from "@/data/adapter/activities.adapter";
 
 interface TripActivitiesProps {
   tripDetails: TripData;
@@ -54,6 +57,10 @@ export const TripActivities = ({ tripDetails }: TripActivitiesProps) => {
     setShowModal(MODAL.NONE);
   };
 
+  const remoteActivities = new RemoteActivities(
+    new ActivitiesAdapter(new AxiosHttpClient())
+  );
+
   const handleCreateActivity = async () => {
     try {
       if (!activityTitle.trim().length || !activityDate || !activityHour) {
@@ -65,17 +72,18 @@ export const TripActivities = ({ tripDetails }: TripActivitiesProps) => {
 
       setIsCreatingActivity(true);
 
-      await activitiesServer.create({
-        title: activityTitle,
+      await remoteActivities.create({
         tripId: tripDetails.id,
         occurs_at: dayjs(activityDate)
           .add(Number(activityHour), "h")
           .toString(),
+        title: activityTitle,
       });
 
       Alert.alert("Atividade criada", "Atividade criada com sucesso!");
 
       await getTripActivies();
+
       resetNewActivityFields();
     } catch (error) {
       throw error;
@@ -86,7 +94,7 @@ export const TripActivities = ({ tripDetails }: TripActivitiesProps) => {
 
   const getTripActivies = async () => {
     try {
-      const activities = await activitiesServer.getActivitiesByTripId(
+      const activities = await remoteActivities.getActivitiesByTripId(
         tripDetails.id
       );
 
