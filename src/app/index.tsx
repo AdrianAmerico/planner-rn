@@ -7,7 +7,7 @@ import {
   Calendar,
   GuestEmail,
   Loading,
-} from "@/components";
+} from "@/presentation/components";
 import {
   MapPin,
   Calendar as IconCalendar,

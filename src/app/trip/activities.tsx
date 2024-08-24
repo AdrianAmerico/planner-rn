@@ -8,7 +8,7 @@ import {
   Input,
   Loading,
   Modal,
-} from "@/components";
+} from "@/presentation/components";
 import {
   PlusIcon,
   Tag,

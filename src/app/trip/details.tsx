@@ -8,7 +8,7 @@ import {
   ParticipantProps,
   TripLink,
   TripLinkProps,
-} from "@/components";
+} from "@/presentation/components";
 import { LinksAdapter } from "@/data/adapter/links.adapter";
 import { RemoteLinks } from "@/domain/links";
 import { AxiosHttpClient } from "@/infra/axios-http-client";
