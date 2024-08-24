@@ -20,11 +20,12 @@ import { colors } from "@/styles";
 import { calendarUtils, DatesSelected, validateInput } from "@/utils";
 import { DateData } from "react-native-calendars";
 import dayjs from "dayjs";
-import { tripStorage } from "@/storage/trip";
 import { router } from "expo-router";
 import { RemoteTrip } from "@/domain/trip/trip";
 import { TripAdapter } from "@/data/adapter/trip.adapter";
 import { AxiosHttpClient } from "@/infra/axios-http-client";
+import { RemoteTripStorage } from "@/domain/trip-storage";
+import { TripStorageAdapter } from "@/data/adapter/trip-storage.adapter";
 
 enum StepForm {
   TRIP_DETAILS = 1,
@@ -48,6 +49,7 @@ const Home = () => {
   const [emailToInvites, setEmailToInvites] = useState<string[]>([]);
 
   const tripServer = new RemoteTrip(new TripAdapter(new AxiosHttpClient()));
+  const tripStorage = new RemoteTripStorage(new TripStorageAdapter());
 
   const handleNextStepForm = () => {
     if (
@@ -119,7 +121,7 @@ const Home = () => {
     try {
       await tripStorage.save(tripId);
 
-      router.navigate("/trip/" + tripId);
+      router.navigate(`/trip/${tripId}`);
     } catch (error) {
       Alert.alert("Salvar viagem", "Não foi possível salvar a viagem.");
     }
@@ -159,7 +161,7 @@ const Home = () => {
       const trip = await tripServer.getById(tripId);
 
       if (trip) {
-        router.navigate("/trip/" + trip.id);
+        router.navigate(`/trip/${trip.id}`);
       }
     } catch (error) {
       setIsCreatingTrip(false);
