@@ -15,7 +15,7 @@ import {
   Calendar as IconCalendar,
   Clock,
 } from "lucide-react-native";
-import { colors } from "@/styles";
+import { colors } from "@/presentation/styles";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { container } from "tsyringe";
@@ -94,16 +94,16 @@ export const TripActivities = ({ tripDetails }: TripActivitiesProps) => {
 
   const getTripActivies = async () => {
     try {
-      const activities = await remoteActivities.getActivitiesByTripId(
+      const { activities } = await remoteActivities.getActivitiesByTripId(
         tripDetails.id
       );
 
-      const activitiesToSectionList = activities.map((dayActivity) => ({
+      const activitiesToSectionList = activities?.map((dayActivity) => ({
         title: {
           dayNumber: dayjs(dayActivity.date).date(),
           dayName: dayjs(dayActivity.date).format("dddd").replace("-feira", ""),
         },
-        data: dayActivity.activities.map((activity) => ({
+        data: dayActivity?.activities?.map((activity) => ({
           id: activity.id,
           title: activity.title,
           hour: dayjs(activity.occurs_at).format("hh[:]mm[h]"),

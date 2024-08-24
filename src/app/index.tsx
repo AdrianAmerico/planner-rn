@@ -16,7 +16,7 @@ import {
   ArrowRight,
   AtSign,
 } from "lucide-react-native";
-import { colors } from "@/styles";
+import { colors } from "@/presentation/styles";
 import { calendarUtils, DatesSelected, validateInput } from "@/utils";
 import { DateData } from "react-native-calendars";
 import dayjs from "dayjs";

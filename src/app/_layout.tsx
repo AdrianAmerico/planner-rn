@@ -7,7 +7,7 @@ import {
   Inter_600SemiBold,
 } from "@expo-google-fonts/inter";
 import { Loading } from "@/presentation/components";
-import "@/styles/global.css";
+import "@/presentation/styles/global.css";
 import "@/utils/dayjsLocaleConfig";
 import 'reflect-metadata';
 

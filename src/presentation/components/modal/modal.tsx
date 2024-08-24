@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { BlurView } from "expo-blur";
 
-import { colors } from "@/styles/colors";
+import { colors } from "@/presentation/styles/colors";
 
 type Props = ModalProps & {
   title: string;

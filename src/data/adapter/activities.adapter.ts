@@ -1,4 +1,8 @@
-import { ActivitiesDataSource, Activity } from "../activities";
+import {
+  ActivitiesDataSource,
+  Activity,
+  ActivityResponse,
+} from "../activities";
 import { HttpClient } from "../protocols/http";
 import { injectable } from "tsyringe";
 
@@ -31,7 +35,7 @@ export class ActivitiesAdapter implements ActivitiesDataSource {
 
   async getActivitiesByTripId(tripId: string) {
     const { data } = await this.httpClient
-      .request<{ date: string; activities: Activity[] }[]>({
+      .request<ActivityResponse>({
         url: `/trips/${tripId}/activities`,
         method: "get",
       })

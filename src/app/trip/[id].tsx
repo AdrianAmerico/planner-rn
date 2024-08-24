@@ -16,7 +16,7 @@ import {
   Calendar as IconCalendar,
   User,
 } from "lucide-react-native";
-import { colors } from "@/styles";
+import { colors } from "@/presentation/styles";
 import dayjs from "dayjs";
 import { TripActivities } from "./activities";
 import { TripDetailsTab } from "./details";

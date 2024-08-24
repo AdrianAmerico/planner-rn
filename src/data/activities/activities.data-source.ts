@@ -1,8 +1,6 @@
-import { Activity, ActivityCreate } from "./activities";
+import { Activity, ActivityCreate, ActivityResponse } from "./activities";
 
 export interface ActivitiesDataSource {
   create(props: ActivityCreate): Promise<{ activityId: string }>;
-  getActivitiesByTripId(
-    tripId: string
-  ): Promise<{ date: string; activities: Activity[] }[]>;
+  getActivitiesByTripId(tripId: string): Promise<ActivityResponse>;
 }

@@ -1,4 +1,4 @@
-import { colors } from "@/styles/colors"
+import { colors } from "@/presentation/styles/colors"
 import { Link2 } from "lucide-react-native"
 import { Text, TouchableOpacity, View } from "react-native"
 import * as Linking from "expo-linking"

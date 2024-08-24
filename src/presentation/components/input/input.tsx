@@ -7,7 +7,7 @@ import {
   Platform,
 } from "react-native";
 import clsx from "clsx";
-import { colors } from "@/styles";
+import { colors } from "@/presentation/styles";
 
 type Variants = "primary" | "secondary" | "tertiary";
 
