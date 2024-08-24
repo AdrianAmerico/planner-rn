@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { Alert, Keyboard, Text, TouchableOpacity, View } from "react-native";
-import { Button, Calendar, Input, Loading, Modal } from "@/presentation/components";
+import {
+  Button,
+  Calendar,
+  Input,
+  Loading,
+  Modal,
+} from "@/presentation/components";
 import {
   CalendarRange,
   Info,
@@ -16,13 +22,14 @@ import { TripActivities } from "./activities";
 import { TripDetailsTab } from "./details";
 import { DateData } from "react-native-calendars";
 import { calendarUtils, DatesSelected, validateInput } from "@/utils";
-import { tripStorage } from "@/storage/trip";
 import { TripDetails } from "@/data/trip";
 import { RemoteTrip } from "@/domain/trip/trip";
 import { TripAdapter } from "@/data/adapter/trip.adapter";
 import { AxiosHttpClient } from "@/infra/axios-http-client";
 import { RemoteParticipants } from "@/domain/participants/participants";
 import { ParticipantsAdapter } from "@/data/adapter/participants.adapter";
+import { RemoteTripStorage } from "@/domain/trip-storage";
+import { TripStorageAdapter } from "@/data/adapter/trip-storage.adapter";
 
 export type TripData = TripDetails & {
   when: string;
@@ -51,6 +58,7 @@ const Trip = () => {
   const participantsServer = new RemoteParticipants(
     new ParticipantsAdapter(new AxiosHttpClient())
   );
+  const tripStorage = new RemoteTripStorage(new TripStorageAdapter());
 
   const tripParams = useLocalSearchParams<{
     id: string;
