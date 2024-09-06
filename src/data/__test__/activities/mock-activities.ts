@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { Activity, ActivityCreate, ActivityResponse } from "../activities";
+import { Activity, ActivityCreate, ActivityResponse } from "../../activities/activities";
 
 export const makeActivity = (props?: Partial<Activity>): Activity => ({
   id: faker.string.uuid(),

@@ -3,8 +3,8 @@ import { RemoteActivities } from "../activities";
 import {
   makeActivityCreate,
   makeActivityResponse,
-} from "@/data/activities/test";
-import { MockActivitiesAdapter } from "@/data/adapter/test";
+} from "@/data/__test__/activities";
+import { MockActivitiesAdapter } from "@/data/__test__/adapter";
 
 describe("Activities", () => {
   const makeSut = () => {
