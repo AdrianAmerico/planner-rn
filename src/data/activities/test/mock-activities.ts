@@ -8,7 +8,7 @@ export const makeActivity = (props?: Partial<Activity>): Activity => ({
   ...props,
 });
 
-export const mockActivityCreate = (
+export const makeActivityCreate = (
   props?: Partial<ActivityCreate>
 ): ActivityCreate => ({
   tripId: faker.string.uuid(),
@@ -17,7 +17,7 @@ export const mockActivityCreate = (
   ...props,
 });
 
-export const mockActivityResponse = (
+export const makeActivityResponse = (
   props?: Partial<ActivityResponse>
 ): ActivityResponse => ({
   activities: [

@@ -1,12 +1,6 @@
-import {
-  ActivitiesDataSource,
-  Activity,
-  ActivityResponse,
-} from "../activities";
+import { ActivitiesDataSource, ActivityResponse } from "../activities";
 import { HttpClient } from "../protocols/http";
-import { injectable } from "tsyringe";
 
-@injectable()
 export class ActivitiesAdapter implements ActivitiesDataSource {
   constructor(private readonly httpClient: HttpClient) {}
 

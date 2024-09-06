@@ -18,7 +18,6 @@ import {
 import { colors } from "@/presentation/styles";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { container } from "tsyringe";
 import { RemoteActivities } from "@/domain";
 import { AxiosHttpClient } from "@/infra/axios-http-client";
 import { ActivitiesAdapter } from "@/data/adapter/activities.adapter";

@@ -1,8 +1,6 @@
 import { ActivityCreate } from "@/data/activities/activities";
 import { ActivitiesDataSource } from "@/data/activities";
-import { injectable } from "tsyringe";
 
-@injectable()
 export class RemoteActivities {
   constructor(private dataSource: ActivitiesDataSource) {}
 
