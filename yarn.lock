@@ -1197,6 +1197,11 @@
     find-up "^5.0.0"
     js-yaml "^4.1.0"
 
+"@faker-js/faker@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-9.0.0.tgz#3cc9af90c784d1081ebd0d85ea10bc648fc5c981"
+  integrity sha512-dTDHJSmz6c1OJ6HO7jiUiIb4sB20Dlkb3pxYsKm0qTXm2Bmj97rlXIhlvaFsW2rvCi+OLlwKLVSS6ZxFUVZvjQ==
+
 "@graphql-typed-document-node/core@^3.1.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.2.0.tgz#5f3d96ec6b2354ad6d8a28bf216a1d97b5426861"
