@@ -1,4 +1,4 @@
-import { Activity, ActivityCreate, ActivityResponse } from "./activities";
+import { ActivityCreate, ActivityResponse } from "./activities";
 
 export interface ActivitiesDataSource {
   create(props: ActivityCreate): Promise<{ activityId: string }>;

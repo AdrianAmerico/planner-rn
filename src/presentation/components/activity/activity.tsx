@@ -4,17 +4,10 @@ import { colors } from "@/presentation/styles/colors";
 import clsx from "clsx";
 
 export type ActivityProps = {
-  id: string;
-  title: string;
-  hour: string;
-  isBefore: boolean;
+  data: { id: string; title: string; hour: string; isBefore: boolean };
 };
 
-type Props = {
-  data: ActivityProps;
-};
-
-export function Activity({ data }: Props) {
+export function Activity({ data }: ActivityProps) {
   return (
     <View
       className={clsx(
