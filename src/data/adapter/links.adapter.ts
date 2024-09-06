@@ -21,7 +21,7 @@ export class LinksAdapter implements LinksDataSource {
     }
   }
 
-  public async getLinksByTripId(tripId: string): Promise<Link[]> {
+  public async getLinksByTripId(tripId: string) {
     try {
       const { data } = await this.httpClient.request<{ links: Link[] }>({
         method: "get",
