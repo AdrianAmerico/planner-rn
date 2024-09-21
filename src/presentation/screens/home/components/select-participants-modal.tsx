@@ -3,6 +3,7 @@ import { AtSign, View } from "lucide-react-native";
 import { MODAL } from "../constants";
 import { Text } from "react-native";
 import { colors } from "@/presentation/styles";
+import { Form } from "@/presentation/components/form";
 
 interface SelectParticipantsModalProps {
   showModal: number;
@@ -46,11 +47,12 @@ export const SelectParticipantsModal = ({
         )}
       </View>
 
-      <View className="gap-4 mt-4">
+      <Form className="gap-4 mt-4">
         <Input variant="secondary">
           <AtSign color={colors.zinc[400]} size={20} />
 
           <Input.Field
+          name="emailToInvite"
             placeholder="Digite o email do convidado"
             onChangeText={(text) => setEmailToInvite(text.toLocaleLowerCase())}
             value={emailToInvite}
@@ -63,7 +65,7 @@ export const SelectParticipantsModal = ({
         <Button onPress={handleAddEmail}>
           <Button.Title>Convidar</Button.Title>
         </Button>
-      </View>
+      </Form>
     </Modal>
   );
 };

@@ -21,8 +21,9 @@ import { TripStorageAdapter } from "@/data/adapter/trip-storage.adapter";
 import { SelectDateModal } from "./components/select-date-modal";
 import { MODAL, StepForm } from "./constants";
 import { SelectParticipantsModal } from "./components/select-participants-modal";
+import { Form } from "@/presentation/components/form";
 
-const Home = () => {
+export const Home = () => {
   const [isCreatingTrip, setIsCreatingTrip] = useState(false);
   const [isGettingTrip, setIsGettingTrip] = useState(true);
   const [stepForm, setStepForm] = useState(StepForm.TRIP_DETAILS);
@@ -176,20 +177,24 @@ const Home = () => {
         Convide seus amigos e planeje sua{"\n"} proxima viagem
       </Text>
 
-      <View className="w-full bg-zinc-900 p-4 rounded-xl my-8 border border-zinc-800 px-5">
+      <Form className="w-full bg-zinc-900 p-4 rounded-xl my-8 border border-zinc-800 px-5">
         <Input>
           <MapPin color={colors.zinc[400]} />
+
           <Input.Field
+            name="destination"
             placeholder="Para onde?"
             editable={stepForm === StepForm.TRIP_DETAILS}
-            value={destination}
-            onChangeText={setDestination}
+            // value={destination}
+            // onChangeText={setDestination}
           />
         </Input>
 
         <Input>
           <IconCalendar color={colors.zinc[400]} />
+
           <Input.Field
+            name="dates"
             placeholder="Quando?"
             editable={stepForm === StepForm.TRIP_DETAILS}
             onFocus={() => Keyboard.dismiss()}
@@ -197,7 +202,7 @@ const Home = () => {
             onPressIn={() =>
               stepForm === StepForm.TRIP_DETAILS && setShowModal(MODAL.CALENDAR)
             }
-            value={selectedDates.formatDatesInText}
+            // value={selectedDates.formatDatesInText}
           />
         </Input>
 
@@ -216,13 +221,14 @@ const Home = () => {
             <Input>
               <UserRoundPlus color={colors.zinc[400]} />
               <Input.Field
+                name="guests"
                 placeholder="Quem estará na viagem?"
                 autoCorrect={false}
-                value={
-                  emailToInvites.length
-                    ? `${emailToInvites.length} pessoas(a) convidadas(s)`
-                    : ""
-                }
+                // value={
+                //   emailToInvites.length
+                //     ? `${emailToInvites.length} pessoas(a) convidadas(s)`
+                //     : ""
+                // }
                 onPress={() => {
                   Keyboard.dismiss();
                   setShowModal(MODAL.GUESTS);
@@ -239,12 +245,13 @@ const Home = () => {
               ? "Continuar"
               : "Confirmar Viagem"}
           </Button.Title>
+
           <ArrowRight color={colors.lime["950"]} size={20} />
         </Button>
-      </View>
+      </Form>
 
       <Text className="text-zinc-500 font-regular text-center text-base">
-        Ao planehar sua viagem pelo plann.er, você automaticamente concorda com
+        Ao planejar sua viagem pelo plann.er, você automaticamente concorda com
         nossos{" "}
         <Text className="text-zinc-300 underline">
           termos de uso e politicas de privacidade.
@@ -270,5 +277,3 @@ const Home = () => {
     </View>
   );
 };
-
-export default Home;

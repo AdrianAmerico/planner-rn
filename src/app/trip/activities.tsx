@@ -21,6 +21,7 @@ import dayjs from "dayjs";
 import { RemoteActivities } from "@/domain";
 import { AxiosHttpClient } from "@/infra/axios-http-client";
 import { ActivitiesAdapter } from "@/data/adapter/activities.adapter";
+import { Form } from "@/presentation/components/form";
 
 interface TripActivitiesProps {
   tripDetails: TripData;
@@ -170,11 +171,12 @@ export const TripActivities = ({ tripDetails }: TripActivitiesProps) => {
         visible={showModal === MODAL.NEW_ACTIVITY}
         onClose={() => setShowModal(MODAL.NONE)}
       >
-        <View className="mt-4 mb-3">
+        <Form className="mt-4 mb-3">
           <Input variant="secondary">
             <Tag color={colors.zinc[400]} size={20} />
 
             <Input.Field
+            name="activity"
               placeholder="Qual atividade?"
               onChangeText={setActivityTitle}
               value={activityTitle}
@@ -186,6 +188,7 @@ export const TripActivities = ({ tripDetails }: TripActivitiesProps) => {
               <IconCalendar color={colors.zinc[400]} size={20} />
 
               <Input.Field
+              name="dates"
                 placeholder="Data"
                 onChangeText={(text) =>
                   setActivityDate(text.replace(/[^0-9]/g, ""))
@@ -203,6 +206,7 @@ export const TripActivities = ({ tripDetails }: TripActivitiesProps) => {
               <Clock color={colors.zinc[400]} size={20} />
 
               <Input.Field
+              name="hour"
                 placeholder="Horário?"
                 onChangeText={(text) =>
                   setActivityHour(text.replace(/[^0-9]/g, ""))
@@ -213,7 +217,7 @@ export const TripActivities = ({ tripDetails }: TripActivitiesProps) => {
               />
             </Input>
           </View>
-        </View>
+        </Form>
 
         <Button
           onPress={handleCreateActivity}

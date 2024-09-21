@@ -8,12 +8,18 @@ import {
 } from "react-native";
 import clsx from "clsx";
 import { colors } from "@/presentation/styles";
+import { Controller } from "react-hook-form";
+import { useFormContext } from "../form";
 
 type Variants = "primary" | "secondary" | "tertiary";
 
 type InputProps = ViewProps & {
   children: ReactNode;
   variant?: Variants;
+};
+
+type FieldProps = TextInputProps & {
+  name: string;
 };
 
 const Input = ({
@@ -40,14 +46,24 @@ const Input = ({
   );
 };
 
-const Field = ({ ...rest }: TextInputProps) => {
+const Field = ({ name, ...rest }: FieldProps) => {
+  const { control } = useFormContext();
+
   return (
-    <TextInput
-      className="flex-1 text-zinc-100 text-lg font-regular"
-      placeholderTextColor={colors.zinc[400]}
-      cursorColor={colors.zinc[100]}
-      selectionColor={Platform.OS === "ios" ? colors.zinc[100] : undefined}
-      {...rest}
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <TextInput
+          className="flex-1 text-zinc-100 text-lg font-regular"
+          placeholderTextColor={colors.zinc[400]}
+          cursorColor={colors.zinc[100]}
+          selectionColor={Platform.OS === "ios" ? colors.zinc[100] : undefined}
+          value={field.value}
+          onChangeText={field.onChange}
+          {...rest}
+        />
+      )}
     />
   );
 };

@@ -30,6 +30,7 @@ import { RemoteParticipants } from "@/domain/participants/participants";
 import { ParticipantsAdapter } from "@/data/adapter/participants.adapter";
 import { RemoteTripStorage } from "@/domain/trip-storage";
 import { TripStorageAdapter } from "@/data/adapter/trip-storage.adapter";
+import { Form } from "@/presentation/components/form";
 
 export type TripData = TripDetails & {
   when: string;
@@ -209,10 +210,10 @@ const Trip = () => {
   }
 
   return (
-    <View className="flex-1 px-5 pt-16">
+    <Form className="flex-1 px-5 pt-16">
       <Input variant="tertiary">
         <MapPin color={colors.zinc[400]} size={20} />
-        <Input.Field value={tripDetails.when} readOnly />
+        <Input.Field name="destination" value={tripDetails.when} readOnly />
 
         <TouchableOpacity
           activeOpacity={0.6}
@@ -270,6 +271,7 @@ const Trip = () => {
             <MapPin color={colors.zinc[400]} size={20} />
 
             <Input.Field
+              name="destination"
               placeholder="Para onde?"
               onChangeText={setDestination}
               value={destination}
@@ -280,6 +282,7 @@ const Trip = () => {
             <IconCalendar color={colors.zinc[400]} size={20} />
 
             <Input.Field
+              name="dates"
               placeholder="Quando?"
               value={selectedDates.formatDatesInText}
               onPressIn={() => setShowModal(MODAL.CALENDAR)}
@@ -342,6 +345,7 @@ const Trip = () => {
             <User color={colors.zinc[400]} size={20} />
 
             <Input.Field
+              name="guestName"
               placeholder="Nome completo"
               onChangeText={setGuestName}
               value={guestName}
@@ -352,6 +356,7 @@ const Trip = () => {
             <User color={colors.zinc[400]} size={20} />
 
             <Input.Field
+              name="guestEmail"
               placeholder="E-mail de confirmação"
               onChangeText={setGuestEmail}
               value={guestEmail}
@@ -366,7 +371,7 @@ const Trip = () => {
           </Button>
         </View>
       </Modal>
-    </View>
+    </Form>
   );
 };
 

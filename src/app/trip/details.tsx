@@ -17,6 +17,7 @@ import { validateInput } from "@/utils";
 import { Plus } from "lucide-react-native";
 import { RemoteParticipants } from "@/domain/participants/participants";
 import { ParticipantsAdapter } from "@/data/adapter/participants.adapter";
+import { Form } from "@/presentation/components/form";
 
 interface TripActivitiesProps {
   tripId: string;
@@ -144,9 +145,10 @@ export const TripDetailsTab = ({ tripId }: TripActivitiesProps) => {
         visible={showNewLinkModal}
         onClose={() => setShowNewLinkModal(false)}
       >
-        <View className="gap-2 mb-3">
+        <Form className="gap-2 mb-3">
           <Input variant="secondary">
             <Input.Field
+            name="linkTitle"
               placeholder="Titulo do link"
               onChangeText={setLinkTitle}
               value={linkTitle}
@@ -155,6 +157,7 @@ export const TripDetailsTab = ({ tripId }: TripActivitiesProps) => {
 
           <Input variant="secondary">
             <Input.Field
+            name="linkUrl"
               placeholder="URL"
               onChangeText={setLinkUrl}
               value={linkUrl}
@@ -164,7 +167,7 @@ export const TripDetailsTab = ({ tripId }: TripActivitiesProps) => {
           <Button onPress={handleCreateTripLink} isLoading={isCreatingLinkTrip}>
             <Button.Title>Salvar link</Button.Title>
           </Button>
-        </View>
+        </Form>
       </Modal>
     </View>
   );

@@ -1,4 +1,4 @@
-import Home from "@/presentation/screens/home/home";
+import { Home } from "@/presentation/screens/home";
 
 const HomeScreen = () => {
   return <Home />;

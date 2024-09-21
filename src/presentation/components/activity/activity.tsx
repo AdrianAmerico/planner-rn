@@ -7,7 +7,7 @@ export type ActivityProps = {
   data: { id: string; title: string; hour: string; isBefore: boolean };
 };
 
-export function Activity({ data }: ActivityProps) {
+export const Activity = ({ data }: ActivityProps) => {
   return (
     <View
       className={clsx(
