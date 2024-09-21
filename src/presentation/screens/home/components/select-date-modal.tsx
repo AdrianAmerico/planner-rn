@@ -1,22 +1,16 @@
 import { Button, Calendar, Modal } from "@/presentation/components";
 import { MODAL } from "../constants";
-import { DateData } from "react-native-calendars";
 import dayjs from "dayjs";
-import { DatesSelected } from "@/utils";
 import { View } from "react-native";
 
 interface SelectDateModalProps {
   showModal: number;
-  setShowModal: (value: number) => void;
-  selectedDates: DatesSelected;
-  handleSelectDates: (date: DateData) => void;
+  setShowModal: (modal: number) => void;
 }
 
 export const SelectDateModal = ({
-  selectedDates,
   setShowModal,
   showModal,
-  handleSelectDates,
 }: SelectDateModalProps) => {
   return (
     <Modal
@@ -26,11 +20,7 @@ export const SelectDateModal = ({
       visible={showModal === MODAL.CALENDAR}
     >
       <View className="gap-4 mt-4">
-        <Calendar
-          onDayPress={handleSelectDates}
-          markedDates={selectedDates.dates}
-          minDate={dayjs().toISOString()}
-        />
+        <Calendar name="selectedDates" minDate={dayjs().toISOString()} />
 
         <Button onPress={() => setShowModal(MODAL.NONE)}>
           <Button.Title>Confirmar</Button.Title>

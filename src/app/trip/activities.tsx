@@ -22,6 +22,7 @@ import { RemoteActivities } from "@/domain";
 import { AxiosHttpClient } from "@/infra/axios-http-client";
 import { ActivitiesAdapter } from "@/data/adapter/activities.adapter";
 import { Form } from "@/presentation/components/form";
+import { useForm } from "react-hook-form";
 
 interface TripActivitiesProps {
   tripDetails: TripData;
@@ -49,6 +50,7 @@ export const TripActivities = ({ tripDetails }: TripActivitiesProps) => {
   const [isCreatingActivity, setIsCreatingActivity] = useState(false);
   const [isLoadingActivities, setIsLoadingActivities] = useState(true);
   const [tripActivities, setTripActivities] = useState<TripActivity[]>([]);
+  const formData = useForm({ mode: "onChange" });
 
   const resetNewActivityFields = () => {
     setActivityTitle("");
@@ -111,7 +113,7 @@ export const TripActivities = ({ tripDetails }: TripActivitiesProps) => {
         })),
       }));
 
-      setTripActivities(activitiesToSectionList);
+      setTripActivities(activitiesToSectionList as any);
     } catch (error) {
       console.log(error);
 
@@ -171,51 +173,54 @@ export const TripActivities = ({ tripDetails }: TripActivitiesProps) => {
         visible={showModal === MODAL.NEW_ACTIVITY}
         onClose={() => setShowModal(MODAL.NONE)}
       >
-        <Form className="mt-4 mb-3">
-          <Input variant="secondary">
+        <Form formData={formData} className="mt-4 mb-3">
+          <Input
+            name="activity"
+            placeholder="Qual atividade?"
+            variant="secondary"
+            leftIcon={<Tag color={colors.zinc[400]} size={20} />}
+          />
+          {/* <Input variant="secondary">
             <Tag color={colors.zinc[400]} size={20} />
 
             <Input.Field
-            name="activity"
+              name="activity"
               placeholder="Qual atividade?"
               onChangeText={setActivityTitle}
               value={activityTitle}
             />
-          </Input>
+          </Input> */}
 
           <View className="w-full mt-2 flex-row gap-2">
-            <Input variant="secondary" className="flex-1">
-              <IconCalendar color={colors.zinc[400]} size={20} />
-
-              <Input.Field
+            <Input
+              leftIcon={<IconCalendar color={colors.zinc[400]} size={20} />}
+              variant="secondary"
+              className="flex-1"
               name="dates"
-                placeholder="Data"
-                onChangeText={(text) =>
-                  setActivityDate(text.replace(/[^0-9]/g, ""))
-                }
-                value={
-                  activityDate ? dayjs(activityDate).format("DD [de] MMMM") : ""
-                }
-                onFocus={() => Keyboard.dismiss()}
-                showSoftInputOnFocus={false}
-                onPressIn={() => setShowModal(MODAL.CALENDAR)}
-              />
-            </Input>
+              placeholder="Data"
+              onChangeText={(text) =>
+                setActivityDate(text.replace(/[^0-9]/g, ""))
+              }
+              value={
+                activityDate ? dayjs(activityDate).format("DD [de] MMMM") : ""
+              }
+              onFocus={() => Keyboard.dismiss()}
+              showSoftInputOnFocus={false}
+              onPressIn={() => setShowModal(MODAL.CALENDAR)}
+            />
 
-            <Input variant="secondary" className="flex-1">
-              <Clock color={colors.zinc[400]} size={20} />
-
-              <Input.Field
+            <Input
+              variant="secondary"
+              className="flex-1"
               name="hour"
-                placeholder="Horário?"
-                onChangeText={(text) =>
-                  setActivityHour(text.replace(/[^0-9]/g, ""))
-                }
-                value={activityHour}
-                keyboardType="numeric"
-                maxLength={2}
-              />
-            </Input>
+              placeholder="Horário?"
+              onChangeText={(text) =>
+                setActivityHour(text.replace(/[^0-9]/g, ""))
+              }
+              value={activityHour}
+              keyboardType="numeric"
+              maxLength={2}
+            />
           </View>
         </Form>
 

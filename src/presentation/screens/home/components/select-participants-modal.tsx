@@ -1,9 +1,8 @@
 import { Button, GuestEmail, Input, Modal } from "@/presentation/components";
-import { AtSign, View } from "lucide-react-native";
+import { AtSign } from "lucide-react-native";
 import { MODAL } from "../constants";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { colors } from "@/presentation/styles";
-import { Form } from "@/presentation/components/form";
 
 interface SelectParticipantsModalProps {
   showModal: number;
@@ -47,25 +46,23 @@ export const SelectParticipantsModal = ({
         )}
       </View>
 
-      <Form className="gap-4 mt-4">
-        <Input variant="secondary">
-          <AtSign color={colors.zinc[400]} size={20} />
-
-          <Input.Field
+      <View className="gap-4 mt-4">
+        <Input
           name="emailToInvite"
-            placeholder="Digite o email do convidado"
-            onChangeText={(text) => setEmailToInvite(text.toLocaleLowerCase())}
-            value={emailToInvite}
-            keyboardType="email-address"
-            returnKeyType="send"
-            onSubmitEditing={handleAddEmail}
-          />
-        </Input>
+          placeholder="Digite o email do convidado"
+          onChangeText={(text) => setEmailToInvite(text.toLocaleLowerCase())}
+          value={emailToInvite}
+          keyboardType="email-address"
+          returnKeyType="send"
+          onSubmitEditing={handleAddEmail}
+          leftIcon={<AtSign color={colors.zinc[400]} size={20} />}
+          variant="secondary"
+        />
 
         <Button onPress={handleAddEmail}>
           <Button.Title>Convidar</Button.Title>
         </Button>
-      </Form>
+      </View>
     </Modal>
   );
 };

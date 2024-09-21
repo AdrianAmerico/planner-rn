@@ -1,33 +1,48 @@
 import { ReactNode } from "react";
 import {
-  TextInput,
-  TextInputProps,
+  TextInput as RNTextInput,
+  TextInputProps as RNTextInputProps,
   View,
-  ViewProps,
   Platform,
 } from "react-native";
 import clsx from "clsx";
 import { colors } from "@/presentation/styles";
-import { Controller } from "react-hook-form";
-import { useFormContext } from "../form";
+import {
+  useController,
+  UseControllerProps,
+  useFormContext,
+} from "react-hook-form";
 
 type Variants = "primary" | "secondary" | "tertiary";
 
-type InputProps = ViewProps & {
-  children: ReactNode;
-  variant?: Variants;
-};
-
-type FieldProps = TextInputProps & {
+interface TextInputProps extends RNTextInputProps, UseControllerProps {
+  label?: string;
   name: string;
-};
+  defaultValue?: string;
+  variant?: Variants;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
+}
 
-const Input = ({
+export const Input = ({
   children,
   variant = "primary",
   className,
+  name,
+  leftIcon,
+  rightIcon,
   ...rest
-}: InputProps) => {
+}: TextInputProps) => {
+  const formContext = useFormContext();
+
+  if (!formContext || !name) {
+    const msg = !formContext
+      ? "TextInput must be wrapped by the FormProvider"
+      : "Name must be defined";
+    console.error(msg);
+    return null;
+  }
+
   return (
     <View
       className={clsx(
@@ -41,33 +56,37 @@ const Input = ({
       )}
       {...rest}
     >
-      {children}
+      {leftIcon}
+      <Field name={name} {...rest} />
+      {rightIcon}
     </View>
   );
 };
 
-const Field = ({ name, ...rest }: FieldProps) => {
-  const { control } = useFormContext();
+const Field = (props: TextInputProps) => {
+  // const { formState } = useFormContext();
+
+  const { name, label, rules, defaultValue, ...inputProps } = props;
+
+  const { field } = useController({ name, rules, defaultValue });
+
+  // const hasError = Boolean(formState?.errors[name]);
+
+  // const textError = formState?.errors[name]?.message as string;
 
   return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field }) => (
-        <TextInput
-          className="flex-1 text-zinc-100 text-lg font-regular"
-          placeholderTextColor={colors.zinc[400]}
-          cursorColor={colors.zinc[100]}
-          selectionColor={Platform.OS === "ios" ? colors.zinc[100] : undefined}
-          value={field.value}
-          onChangeText={field.onChange}
-          {...rest}
-        />
-      )}
-    />
+    <>
+      <RNTextInput
+        className="flex-1 text-zinc-100 text-lg font-regular"
+        placeholderTextColor={colors.zinc[400]}
+        cursorColor={colors.zinc[100]}
+        selectionColor={Platform.OS === "ios" ? colors.zinc[100] : undefined}
+        onChangeText={field.onChange}
+        autoCapitalize="none"
+        onBlur={field.onBlur}
+        value={field.value}
+        {...inputProps}
+      />
+    </>
   );
 };
-
-Input.Field = Field;
-
-export { Input };

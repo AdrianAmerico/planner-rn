@@ -1,26 +1,15 @@
-import { createContext, ReactNode, useContext } from "react";
+import { ReactNode } from "react";
 import { View, ViewProps } from "react-native";
-import { useForm } from "react-hook-form";
-
-const FormContext = createContext({} as ReturnType<typeof useForm>);
+import { FormProvider, useForm } from "react-hook-form";
 
 interface FormProps extends ViewProps {
   children: ReactNode;
+  formData: ReturnType<typeof useForm>;
 }
 
-const FormProvider = ({ children }: { children: React.ReactNode }) => {
-  const form = useForm();
-
-  return <FormContext.Provider value={form}>{children}</FormContext.Provider>;
-};
-
-export const useFormContext = () => {
-  return useContext(FormContext);
-};
-
-export const Form = ({ children, ...props }: FormProps) => {
+export const Form = ({ children, formData, ...props }: FormProps) => {
   return (
-    <FormProvider>
+    <FormProvider {...formData}>
       <View {...props}>{children}</View>
     </FormProvider>
   );

@@ -18,6 +18,7 @@ import { Plus } from "lucide-react-native";
 import { RemoteParticipants } from "@/domain/participants/participants";
 import { ParticipantsAdapter } from "@/data/adapter/participants.adapter";
 import { Form } from "@/presentation/components/form";
+import { useForm } from "react-hook-form";
 
 interface TripActivitiesProps {
   tripId: string;
@@ -30,7 +31,7 @@ export const TripDetailsTab = ({ tripId }: TripActivitiesProps) => {
   const [isCreatingLinkTrip, setIsCreatingLinkTrip] = useState(false);
   const [links, setLinks] = useState<TripLinkProps[]>([]);
   const [participants, setParticipants] = useState<ParticipantProps[]>([]);
-
+  const formData = useForm({ mode: "onChange" });
   const linksServer = new RemoteLinks(new LinksAdapter(new AxiosHttpClient()));
   const participantsServer = new RemoteParticipants(
     new ParticipantsAdapter(new AxiosHttpClient())
@@ -145,24 +146,14 @@ export const TripDetailsTab = ({ tripId }: TripActivitiesProps) => {
         visible={showNewLinkModal}
         onClose={() => setShowNewLinkModal(false)}
       >
-        <Form className="gap-2 mb-3">
-          <Input variant="secondary">
-            <Input.Field
+        <Form formData={formData} className="gap-2 mb-3">
+          <Input
             name="linkTitle"
-              placeholder="Titulo do link"
-              onChangeText={setLinkTitle}
-              value={linkTitle}
-            />
-          </Input>
+            placeholder="Titulo do link"
+            variant="secondary"
+          />
 
-          <Input variant="secondary">
-            <Input.Field
-            name="linkUrl"
-              placeholder="URL"
-              onChangeText={setLinkUrl}
-              value={linkUrl}
-            />
-          </Input>
+          <Input name="linkUrl" placeholder="URL" variant="secondary" />
 
           <Button onPress={handleCreateTripLink} isLoading={isCreatingLinkTrip}>
             <Button.Title>Salvar link</Button.Title>

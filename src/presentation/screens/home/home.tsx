@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { View, Text, Image, Keyboard, Alert } from "react-native";
 import { Input, Button, Loading } from "@/presentation/components";
 import {
-  MapPin,
   Calendar as IconCalendar,
   Settings2,
   UserRoundPlus,
   ArrowRight,
+  MapPin,
 } from "lucide-react-native";
 import { colors } from "@/presentation/styles";
 import { calendarUtils, DatesSelected, validateInput } from "@/utils";
@@ -22,25 +22,35 @@ import { SelectDateModal } from "./components/select-date-modal";
 import { MODAL, StepForm } from "./constants";
 import { SelectParticipantsModal } from "./components/select-participants-modal";
 import { Form } from "@/presentation/components/form";
+import { useForm } from "react-hook-form";
 
 export const Home = () => {
   const [isCreatingTrip, setIsCreatingTrip] = useState(false);
   const [isGettingTrip, setIsGettingTrip] = useState(true);
   const [stepForm, setStepForm] = useState(StepForm.TRIP_DETAILS);
   const [showModal, setShowModal] = useState(MODAL.NONE);
-  const [selectedDates, setSelectedDates] = useState({} as DatesSelected);
-  const [destination, setDestination] = useState("");
   const [emailToInvite, setEmailToInvite] = useState("");
   const [emailToInvites, setEmailToInvites] = useState<string[]>([]);
+  const formData = useForm({
+    mode: "onChange",
+    defaultValues: {
+      selectedDates: {} as DatesSelected,
+      // DatesSelected: {
+      //   startsAt: selectedDates.startsAt,
+      //   endsAt: selectedDates.endsAt,
+      // },
+    },
+  });
 
   const tripServer = new RemoteTrip(new TripAdapter(new AxiosHttpClient()));
   const tripStorage = new RemoteTripStorage(new TripStorageAdapter());
 
-  const handleNextStepForm = () => {
+  const handleNextStepForm = (data: any) => {
+    console.log("submit here", data);
     if (
-      !destination.trim().length ||
-      !selectedDates.startsAt ||
-      !selectedDates.endsAt
+      !data.destination.trim().length ||
+      !data.selectedDates.startsAt ||
+      !data.selectedDates.endsAt
     ) {
       return Alert.alert(
         "Detalhes da viagem",
@@ -48,7 +58,7 @@ export const Home = () => {
       );
     }
 
-    if (destination.length < 4) {
+    if (data.destination.length < 4) {
       return Alert.alert(
         "Detalhes da viagem",
         "O destino da viagem deve conter no mínimo 4 caracteres."
@@ -69,16 +79,6 @@ export const Home = () => {
         onPress: handleCreateTrip,
       },
     ]);
-  };
-
-  const handleSelectDates = (selectedDay: DateData) => {
-    const dates = calendarUtils.orderStartsAtAndEndsAt({
-      startsAt: selectedDates.startsAt,
-      endsAt: selectedDates.endsAt,
-      selectedDay,
-    });
-
-    setSelectedDates(dates);
   };
 
   const handleRemoveEmail = (emailToRemove: string) => {
@@ -116,12 +116,12 @@ export const Home = () => {
     try {
       setIsCreatingTrip(true);
 
-      const newTrip = await tripServer.create({
-        destination,
-        starts_at: dayjs(selectedDates.startsAt?.dateString).toISOString(),
-        ends_at: dayjs(selectedDates.endsAt?.dateString).toISOString(),
-        emails_to_invite: emailToInvites,
-      });
+      // const newTrip = await tripServer.create({
+      //   destination,
+      //   starts_at: dayjs(selectedDates.startsAt?.dateString).toISOString(),
+      //   ends_at: dayjs(selectedDates.endsAt?.dateString).toISOString(),
+      //   emails_to_invite: emailToInvites,
+      // });
 
       Alert.alert("Nova viagem", "Viagem criada com sucesso!", [
         {
@@ -159,6 +159,10 @@ export const Home = () => {
     getTrip();
   }, []);
 
+  console.log("fdsfs", formData.getValues("selectedDates"));
+
+  const selectedDatesWatch = formData.watch("selectedDates");
+
   if (isGettingTrip) {
     return <Loading />;
   }
@@ -177,34 +181,29 @@ export const Home = () => {
         Convide seus amigos e planeje sua{"\n"} proxima viagem
       </Text>
 
-      <Form className="w-full bg-zinc-900 p-4 rounded-xl my-8 border border-zinc-800 px-5">
-        <Input>
-          <MapPin color={colors.zinc[400]} />
+      <Form
+        formData={formData}
+        className="w-full bg-zinc-900 p-4 rounded-xl my-8 border border-zinc-800 px-5"
+      >
+        <Input
+          name="destination"
+          placeholder="Para onde?"
+          editable={stepForm === StepForm.TRIP_DETAILS}
+          leftIcon={<MapPin color={colors.zinc[400]} />}
+        />
 
-          <Input.Field
-            name="destination"
-            placeholder="Para onde?"
-            editable={stepForm === StepForm.TRIP_DETAILS}
-            // value={destination}
-            // onChangeText={setDestination}
-          />
-        </Input>
-
-        <Input>
-          <IconCalendar color={colors.zinc[400]} />
-
-          <Input.Field
-            name="dates"
-            placeholder="Quando?"
-            editable={stepForm === StepForm.TRIP_DETAILS}
-            onFocus={() => Keyboard.dismiss()}
-            showSoftInputOnFocus={false}
-            onPressIn={() =>
-              stepForm === StepForm.TRIP_DETAILS && setShowModal(MODAL.CALENDAR)
-            }
-            // value={selectedDates.formatDatesInText}
-          />
-        </Input>
+        <Input
+          name="dates"
+          placeholder="Quando?"
+          editable={stepForm === StepForm.TRIP_DETAILS}
+          leftIcon={<IconCalendar color={colors.zinc[400]} />}
+          onFocus={() => Keyboard.dismiss()}
+          showSoftInputOnFocus={false}
+          value={selectedDatesWatch.formatDatesInText}
+          onPressIn={() =>
+            stepForm === StepForm.TRIP_DETAILS && setShowModal(MODAL.CALENDAR)
+          }
+        />
 
         {stepForm === StepForm.ADD_EMAIL && (
           <View>
@@ -218,28 +217,24 @@ export const Home = () => {
               </Button>
             </View>
 
-            <Input>
-              <UserRoundPlus color={colors.zinc[400]} />
-              <Input.Field
-                name="guests"
-                placeholder="Quem estará na viagem?"
-                autoCorrect={false}
-                // value={
-                //   emailToInvites.length
-                //     ? `${emailToInvites.length} pessoas(a) convidadas(s)`
-                //     : ""
-                // }
-                onPress={() => {
-                  Keyboard.dismiss();
-                  setShowModal(MODAL.GUESTS);
-                }}
-                showSoftInputOnFocus={false}
-              />
-            </Input>
+            <Input
+              name="guests"
+              placeholder="Quem estará na viagem?"
+              autoCorrect={false}
+              leftIcon={<UserRoundPlus color={colors.zinc[400]} />}
+              onPress={() => {
+                Keyboard.dismiss();
+                setShowModal(MODAL.GUESTS);
+              }}
+              showSoftInputOnFocus={false}
+            />
           </View>
         )}
 
-        <Button onPress={handleNextStepForm} isLoading={isCreatingTrip}>
+        <Button
+          onPress={formData.handleSubmit(handleNextStepForm)}
+          isLoading={isCreatingTrip}
+        >
           <Button.Title>
             {stepForm === StepForm.TRIP_DETAILS
               ? "Continuar"
@@ -248,6 +243,8 @@ export const Home = () => {
 
           <ArrowRight color={colors.lime["950"]} size={20} />
         </Button>
+
+        <SelectDateModal showModal={showModal} setShowModal={setShowModal} />
       </Form>
 
       <Text className="text-zinc-500 font-regular text-center text-base">
@@ -257,13 +254,6 @@ export const Home = () => {
           termos de uso e politicas de privacidade.
         </Text>
       </Text>
-
-      <SelectDateModal
-        selectedDates={selectedDates}
-        showModal={showModal}
-        setShowModal={setShowModal}
-        handleSelectDates={handleSelectDates}
-      />
 
       <SelectParticipantsModal
         emailToInvites={emailToInvites}

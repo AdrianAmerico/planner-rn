@@ -1,16 +1,37 @@
 import {
   Calendar as RNCalendar,
-  CalendarProps,
+  CalendarProps as RNCalendarProps,
   LocaleConfig,
+  DateData,
 } from "react-native-calendars";
 import { colors } from "@/presentation/styles/colors";
 import { fontFamily } from "@/presentation/styles";
-import { ptBR } from "@/utils";
+import { calendarUtils, ptBR } from "@/utils";
+import { useController, useFormContext } from "react-hook-form";
 
 LocaleConfig.locales["pt-br"] = ptBR;
 LocaleConfig.defaultLocale = "pt-br";
 
-export function Calendar({ ...rest }: CalendarProps) {
+interface CalendarProps extends RNCalendarProps {
+  name: string;
+}
+
+export function Calendar({ name, ...rest }: CalendarProps) {
+  const formContext = useFormContext();
+  const { field } = useController({ name });
+
+  const selectedDatesWatch = formContext.watch(name);
+
+  function handleSelectDate(selectedDay: DateData) {
+    const dates = calendarUtils.orderStartsAtAndEndsAt({
+      startsAt: selectedDatesWatch.startsAt,
+      endsAt: selectedDatesWatch.endsAt,
+      selectedDay,
+    });
+
+    field.onChange(dates);
+  }
+
   return (
     <RNCalendar
       hideExtraDays
@@ -32,7 +53,10 @@ export function Calendar({ ...rest }: CalendarProps) {
         calendarBackground: "transparent",
         textDayStyle: { color: colors.zinc[200] },
       }}
-      {...rest}
+      onDayPress={handleSelectDate}
+      markedDates={field.value.dates}
+      // {...rest}
+      {...field}
     />
   );
 }

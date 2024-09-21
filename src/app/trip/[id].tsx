@@ -32,6 +32,7 @@ import { RemoteTripStorage } from "@/domain/trip-storage";
 import { TripStorageAdapter } from "@/data/adapter/trip-storage.adapter";
 import { Form } from "@/presentation/components/form";
 import { SelectDateModal } from "@/presentation/screens/home/components/select-date-modal";
+import { useForm } from "react-hook-form";
 
 export type TripData = TripDetails & {
   when: string;
@@ -55,6 +56,7 @@ const Trip = () => {
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
   const [isConfirmingAttendance, setIsConfirmingAttendance] = useState(false);
+  const formData = useForm({ mode: "onChange" });
 
   const tripServer = new RemoteTrip(new TripAdapter(new AxiosHttpClient()));
   const participantsServer = new RemoteParticipants(
@@ -211,11 +213,19 @@ const Trip = () => {
   }
 
   return (
-    <Form className="flex-1 px-5 pt-16">
-      <Input variant="tertiary">
+    <Form formData={formData} className="flex-1 px-5 pt-16">
+      <Input
+        variant="tertiary"
+        name="destination"
+        leftIcon={<MapPin color={colors.zinc[400]} size={20} />}
+        rightIcon={<Settings2 color={colors.zinc[400]} size={20} />}
+        readOnly
+      />
+
+      {/* <Input variant="tertiary">
         <MapPin color={colors.zinc[400]} size={20} />
         <Input.Field name="destination" value={tripDetails.when} readOnly />
-
+// TODO - Fix this
         <TouchableOpacity
           activeOpacity={0.6}
           className="w-9 h-9 bg-zinc-800 items-center justify-center rounded"
@@ -223,7 +233,7 @@ const Trip = () => {
         >
           <Settings2 color={colors.zinc[400]} size={20} />
         </TouchableOpacity>
-      </Input>
+      </Input> */}
 
       {option === "activity" ? (
         <TripActivities tripDetails={tripDetails} />
@@ -268,28 +278,21 @@ const Trip = () => {
         onClose={() => setShowModal(MODAL.NONE)}
       >
         <View className="gap-2 my-4">
-          <Input variant="secondary">
-            <MapPin color={colors.zinc[400]} size={20} />
+          <Input
+            name="destination"
+            variant="secondary"
+            placeholder="Para onde?"
+            leftIcon={<MapPin color={colors.zinc[400]} size={20} />}
+          />
 
-            <Input.Field
-              name="destination"
-              placeholder="Para onde?"
-              onChangeText={setDestination}
-              value={destination}
-            />
-          </Input>
-
-          <Input variant="secondary">
-            <IconCalendar color={colors.zinc[400]} size={20} />
-
-            <Input.Field
-              name="dates"
-              placeholder="Quando?"
-              value={selectedDates.formatDatesInText}
-              onPressIn={() => setShowModal(MODAL.CALENDAR)}
-              onFocus={() => Keyboard.dismiss()}
-            />
-          </Input>
+          <Input
+            variant="secondary"
+            leftIcon={<IconCalendar color={colors.zinc[400]} size={20} />}
+            name="dates"
+            placeholder="Quando?"
+            onPressIn={() => setShowModal(MODAL.CALENDAR)}
+            onFocus={() => Keyboard.dismiss()}
+          />
 
           <Button onPress={handleUpdateTrip} isLoading={isUpdatingTrip}>
             <Button.Title>Atualizar</Button.Title>
@@ -330,27 +333,19 @@ const Trip = () => {
             Para confirmar sua presença, preencha os dados abaixo:
           </Text>
 
-          <Input variant="secondary">
-            <User color={colors.zinc[400]} size={20} />
+          <Input
+            name="guestName"
+            variant="secondary"
+            leftIcon={<User color={colors.zinc[400]} size={20} />}
+            placeholder="Nome completo"
+          />
 
-            <Input.Field
-              name="guestName"
-              placeholder="Nome completo"
-              onChangeText={setGuestName}
-              value={guestName}
-            />
-          </Input>
-
-          <Input variant="secondary">
-            <User color={colors.zinc[400]} size={20} />
-
-            <Input.Field
-              name="guestEmail"
-              placeholder="E-mail de confirmação"
-              onChangeText={setGuestEmail}
-              value={guestEmail}
-            />
-          </Input>
+          <Input
+            name="guestEmail"
+            variant="secondary"
+            leftIcon={<User color={colors.zinc[400]} size={20} />}
+            placeholder="E-mail de confirmação"
+          />
 
           <Button
             isLoading={isConfirmingAttendance}
