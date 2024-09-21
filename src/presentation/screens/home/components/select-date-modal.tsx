@@ -1,9 +1,9 @@
 import { Button, Calendar, Modal } from "@/presentation/components";
-import { View } from "lucide-react-native";
 import { MODAL } from "../constants";
 import { DateData } from "react-native-calendars";
 import dayjs from "dayjs";
 import { DatesSelected } from "@/utils";
+import { View } from "react-native";
 
 interface SelectDateModalProps {
   showModal: number;

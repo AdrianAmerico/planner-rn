@@ -31,6 +31,7 @@ import { ParticipantsAdapter } from "@/data/adapter/participants.adapter";
 import { RemoteTripStorage } from "@/domain/trip-storage";
 import { TripStorageAdapter } from "@/data/adapter/trip-storage.adapter";
 import { Form } from "@/presentation/components/form";
+import { SelectDateModal } from "@/presentation/screens/home/components/select-date-modal";
 
 export type TripData = TripDetails & {
   when: string;
@@ -302,24 +303,12 @@ const Trip = () => {
         </View>
       </Modal>
 
-      <Modal
-        title="Selecionar datas"
-        subtitle="Selecione a data de ida e volta nda viagem"
-        onClose={() => setShowModal(MODAL.NONE)}
-        visible={showModal === MODAL.CALENDAR}
-      >
-        <View className="gap-4 mt-4">
-          <Calendar
-            onDayPress={handleSelectDates}
-            markedDates={selectedDates.dates}
-            minDate={dayjs().toISOString()}
-          />
-
-          <Button onPress={() => setShowModal(MODAL.UPDATE_TRIP)}>
-            <Button.Title>Confirmar</Button.Title>
-          </Button>
-        </View>
-      </Modal>
+      <SelectDateModal
+        selectedDates={selectedDates}
+        setShowModal={setShowModal}
+        showModal={showModal}
+        handleSelectDates={handleSelectDates}
+      />
 
       <Modal
         title="Confirmar presença"
